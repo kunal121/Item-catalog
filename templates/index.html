@@ -1,0 +1,245 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ <link rel="stylesheet" href="{{ url_for('static',filename = 'css/style.css') }}" />
+<link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave+Display" rel="stylesheet">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+   <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+   <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
+</head>
+<body>
+    <nav>
+      <div class="nav-wrapper grey darken-3">
+        <a href="#!" class="brand-logo">Foodie</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="elem right hide-on-med-and-down">
+          <li><a href="{{url_for('showall')}}">All</a></li>
+          <li><a href="{{url_for('sort',categories="vanila")}}">Vanila</a></li>
+          <li><a href="{{url_for('sort',categories="oreo")}}">Oreo</a></li>
+          <li><a href="{{url_for('sort',categories="choclateshakes")}}">choclate shakes</a></li>
+        <!-- <li><a href="mobile.html">SignIn</a></li> -->
+        <li class="right log_out"> <a href="{{url_for('gdisconnect')}}" class="btn transparent">Log out</a></li>
+        <li class="right">
+          <div id="signInButton">
+          <span class="g-signin"
+            data-scope="openid email"
+            data-clientid="579703948877-ka2h015ichp3n6alte1mcd1lo1lh515b.apps.googleusercontent.com"
+            data-redirecturi="postmessage"
+            data-accesstype="offline"
+            data-cookiepolicy="single_host_origin"
+            data-callback="signInCallback"
+            data-approvalprompt="force">
+          </span>
+        </div>
+      </li>
+        </ul>
+
+        <ul class="side-nav" id="mobile-demo">
+          <li>
+          <div class="user-view">
+         <a href=""><img class="circle" id="image" src=""></a>
+         <a href=""><span class="white-text name" id="name">John Doe</span></a>
+         <a href="#!email"><span class="white-text email" id="email">jdandturk@gmail.com</span></a>
+        </div>
+       </li>
+          <li><a href="{{url_for('showall')}}">All</a></li>
+          <li><a href="{{url_for('sort',categories="vanila")}}">Vanila</a></li>
+          <li><a href="{{url_for('sort',categories="oreo")}}">Oreo</a></li>
+          <li><a href="{{url_for('sort',categories="choclateshakes")}}">choclate shakes</a></li>
+        </ul>
+      </div>
+    </nav>
+     {% block content %}
+     {% endblock %}
+    <!-- <div class="container"> -->
+
+  <!-- </div> -->
+<!-- <h4 class="empty-msg ">THE CATALOG IS EMPTY!!</h4> -->
+    <!-- <div class="fixed-action-btn" style="bottom: 45px; right: 24px;"> -->
+         <!-- <a class="btn-floating btn-large grey darken-3 modal-trigger" href="#modal1"> -->
+           <!-- <i class="material-icons">add</i> -->
+         <!-- </a> -->
+   <!-- </div> -->
+   <div class="fixed-action-btn vertical click-to-toggle button">
+  <a class="btn-floating btn-large black">
+    <i class="material-icons">menu</i>
+  </a>
+  <ul>
+    <li><a class="btn-floating red modal-trigger" href="#modal1"><i class="material-icons">add</i></a></li>
+    <li><a class="btn-floating yellow darken-1 edit-btn"><i class="material-icons">create</i></a></li>
+    <li><a class="btn-floating green delete"><i class="material-icons">delete</i></a></li>
+  </ul>
+</div>
+
+   <div id="modal1" class="modal modal-fixed-footer">
+     <h4>Create</h4>
+    <div class="modal-content">
+     <form action='{{url_for('addNewfood')}}' method="post">
+       <div class="row">
+         <div class="input-field col m9 col s12">
+           <input id="food_name" type="text" class="validate" name="name">
+           <label for="food_name">Food Name</label>
+         </div>
+       </div>
+       <div class="row">
+         <div class="input-field col m9 col s12">
+           <input id="categories" type="text" class="validate" name="cat">
+           <label for="categories">categories</label>
+         </div>
+       </div>
+       <div class="row">
+         <div class="input-field col m9 col s12">
+           <input id="img" type="text" class="validate" name="img">
+           <label for="Image_Url">Url</label>
+         </div>
+       </div>
+       <div class="row">
+         <div class="input-field col m9 col s12">
+           <input id="desc" type="text" class="validate" name="desc">
+           <label for="Description">Description</label>
+         </div>
+       </div>
+       <input type="submit" style="margin-left:80%">
+     </form>
+   </div>
+  </div>
+
+
+
+  <div id="modal2" class="modal modal-fixed-footer">
+    <h4>Edit</h4>
+   <div class="modal-content">
+    <form  method="post" action="" id="edit_form">
+      <div class="row">
+        <div class="input-field col m9 col s12">
+          <input id="food_name" type="text" class="validate" name="name">
+          <label for="food_name">Food Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col m9 col s12">
+          <input id="categories" type="text" class="validate" name="cat">
+          <label for="categories">categories</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col m9 col s12">
+          <input id="img" type="text" class="validate" name="img">
+          <label for="Image_Url">Url</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col m9 col s12">
+          <input id="desc" type="text" class="validate" name="desc">
+          <label for="Description">Description</label>
+        </div>
+      </div>
+      <input type="submit" style="margin-left:80%">
+    </form>
+  </div>
+ </div>
+
+ <div id="modal3" class="modal">
+    <div class="modal-content">
+      <h4 id="intro_message">Welcome</h4>
+    </div>
+  </div>
+
+  <script>
+  console.log('{{name}}');
+  $('#name').html('{{name}}');
+  $('#image').attr('src','{{image}}');
+  function secure(){
+    $('#signInButton').remove();
+    $('.button').show();
+    $('.log_out').show();
+
+
+   }
+  </script>
+  <script>
+  flag = {{flag}};
+  console.log(flag);
+  if(flag===1)
+  {
+    secure();
+  }
+  </script>
+
+ <script>
+ function signInCallback(authResult) {
+
+  if (authResult['code']) {
+  // Hide the sign-in button now that the user is authorized
+  $('#signinButton').attr('style', 'display: none');
+  // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+  $.ajax({
+    type: 'POST',
+    url: '/gconnect?state={{STATE}}',
+    processData: false,
+    data: authResult['code'],
+    contentType: 'application/octet-stream; charset=utf-8',
+    success: function(result) {
+          //console.log(result);
+            secure();
+            $('#intro_message').html("welcome,"+result.name);
+            $('#modal3').modal('open');
+            setTimeout("$('#modal3').modal('close');",3000);
+
+
+      // Handle or verify the server response if necessary.
+    //document.write(result);
+
+     if (authResult['error']) {
+  console.log('There was an error: ' + authResult['error']);
+} else {
+      $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+       }
+    }
+
+}); } }
+gapi.signin.render('login', {
+  'scope':"openid email",
+  'clientid':"579703948877-ka2h015ichp3n6alte1mcd1lo1lh515b.apps.googleusercontent.com",
+  'redirecturi':"postmessage",
+  'accesstype':"offline",
+  'cookiepolicy':"single_host_origin",
+  'callback':"signInCallback",
+  'approvalprompt':"force"
+});
+ </script>
+  <script>
+  $( document ).ready(function(){
+     $(".button-collapse").sideNav();
+      $('.modal').modal();
+      $('.edit-btn').click(function(){
+        $('.def').removeClass('fgh');
+        $('.abc').toggleClass('bcd');
+
+      })
+
+      $(".abc").click(function() {
+       var id=$(this).attr('id');
+       //console.log(id);
+       $("#edit_form").attr('action',"/foods/edit/"+id+"/");
+       });
+
+       $('.delete').click(function(){
+         $('.abc').removeClass('bcd');
+         $('.def').toggleClass('fgh');
+       })
+
+       $(".def").click(function() {
+        var id=$(this).attr('id');
+        //console.log(id);
+        $(".def").attr('href',"/foods/delete/"+id+"/");
+   })
+
+});
+
+  </script>
+</body>
+</html>
