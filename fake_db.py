@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 
 from database_setup import Food,Base,User
 
-engine=create_engine('sqlite:///food.db')
+engine=create_engine('postgresql://kunal:kunal121@localhost/food')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
