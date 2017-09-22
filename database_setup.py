@@ -34,5 +34,5 @@ class User(Base):
     user=relationship(Food)
 
 
-engine= create_engine('postgresql://food:kunal@localhost/food')
+engine= create_engine('postgresql://kunal:kunal121@localhost/food')
 Base.metadata.create_all(engine)
