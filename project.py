@@ -11,8 +11,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
-engine = create_engine('postgresql://food:kunal@localhost/food')
-#engine = create_engine('sqlite:///food.db')
+engine = create_engine('postgresql://kunal:kunal121@localhost/food')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
