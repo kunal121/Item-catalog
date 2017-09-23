@@ -20,6 +20,10 @@
 ```
 vagarnt up 
 ```
+3. SSH command:
+```
+vagrant ssh
+```
 2. Run the application :
 ```
 cd /vagrant
