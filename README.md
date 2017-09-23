@@ -1,5 +1,5 @@
 # Item-catalog
-* Project is live here [Item-catalog]("http://ec2-13-126-69-17.ap-south-1.compute.amazonaws.com")
+* Project is live here [Item-catalog](http://ec2-13-126-69-17.ap-south-1.compute.amazonaws.com)
 ### Introduction
 > A web-application to display different items with options for the user to create,edit and delete Items,After the authentication of user they are allowed to perform the operation 
 ### Based on which Technology?
