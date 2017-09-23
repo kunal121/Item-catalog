@@ -15,13 +15,13 @@ import requests
 engine = create_engine('postgresql://kunal:kunal121@localhost/food')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
-session = DBSession()
+dbsession = DBSession()
 CLIENT_ID = json.loads(open('/var/www/Item-catalog/client_secrets.json', 'r').read(
 ))['web']['client_id']
 
 @app.route('/foods/JSON')
 def foodJSON():
-    food=session.query(Food).all()
+    food=dbsession.query(Food).all()
     if login_session.has_key('email') and login_session['email']:
          return jsonify(FoodItems=[i.serialize for i in food])
     return redirect(url_for('showall'))
@@ -34,7 +34,7 @@ def createState():
 
 @app.route('/foods/<string:categories>',methods=['GET','POST'])
 def sort(categories):
-    cat=session.query(Food).filter_by(categories=categories)
+    cat=dbsession.query(Food).filter_by(categories=categories)
     return render_template('main.html',food=cat)
 
 @app.route('/gconnect', methods=['POST'])
@@ -92,7 +92,7 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     # Store the access token in the session for later use.
-    login_session['credentials'] = credentials
+    login_session['credentials'] = access_token
     login_session['gplus_id'] = gplus_id
 
     print login_session['credentials']
@@ -105,7 +105,7 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
-    user_info=session.query(User).filter_by(email=login_session['email']).first()
+    user_info=dbsession.query(User).filter_by(email=login_session['email']).first()
     if user_info is None:
         User(name=login_session['username'],email=login_session['email'],picture=login_session['picture'])
     return jsonify(
@@ -118,7 +118,7 @@ def gconnect():
 @app.route('/gdisconnect')
 def gdisconnect():
     credentials=login_session['credentials']
-    access_token = credentials.access_token
+    access_token = credentials
     print access_token
     if access_token is None:
         print "you are not logged in"
@@ -142,7 +142,7 @@ def gdisconnect():
 @app.route('/foods',methods=['GET','POST'])
 def showall():
       createState()
-      food=session.query(Food).all()
+      food=dbsession.query(Food).all()
       if login_session.has_key('email') and login_session['email']:
           print "sada";
           flag = 1
@@ -158,8 +158,8 @@ def addNewfood():
       if request.method == 'POST':
           newItem = Food(name=request.form['name'],description=request.form['desc'],image=request.form['img'],categories=request.form['cat'])
           print newItem
-          session.add(newItem)
-          session.commit()
+          dbsession.add(newItem)
+          dbsession.commit()
           return redirect(url_for('showall'))
 
 
@@ -185,9 +185,9 @@ def edit(foodid):
 
 @app.route('/foods/delete/<int:foodid>/')
 def delete(foodid):
-    delete = session.query(Food).filter_by(id=foodid).first()
-    session.delete(delete)
-    session.commit()
+    delete = dbsession.query(Food).filter_by(id=foodid).first()
+    dbsession.delete(delete)
+    dbsession.commit()
     return redirect(url_for('showall'))
 
 if __name__ == '__main__':
